@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -20,10 +22,8 @@ gem 'hiredis'
 gem 'redis', '< 5', require: ['redis', 'redis/connection/hiredis']
 gem 'redis-rails'
 
-gem 'dry-monads', '~> 1.6.0'
-gem 'dry-schema', '~> 1.13.3'
-gem 'dry-struct', '~> 1.6.0'
-gem 'dry-validation', '~> 1.10.0'
+gem 'dry-monads'
+gem 'dry-schema'
 
 group :development, :test do
   gem 'awesome_print'

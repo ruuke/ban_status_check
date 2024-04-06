@@ -114,23 +114,12 @@ GEM
       dry-logic (>= 1.4, < 2)
       dry-types (>= 1.7, < 2)
       zeitwerk (~> 2.6)
-    dry-struct (1.6.0)
-      dry-core (~> 1.0, < 2)
-      dry-types (>= 1.7, < 2)
-      ice_nine (~> 0.11)
-      zeitwerk (~> 2.6)
     dry-types (1.7.2)
       bigdecimal (~> 3.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.0)
       dry-inflector (~> 1.0)
       dry-logic (~> 1.4)
-      zeitwerk (~> 2.6)
-    dry-validation (1.10.0)
-      concurrent-ruby (~> 1.0)
-      dry-core (~> 1.0, < 2)
-      dry-initializer (~> 3.0)
-      dry-schema (>= 1.12, < 2)
       zeitwerk (~> 2.6)
     erubi (1.12.0)
     factory_bot (6.4.6)
@@ -152,7 +141,6 @@ GEM
     hiredis (0.6.3)
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
-    ice_nine (0.11.2)
     io-console (0.7.2)
     irb (1.12.0)
       rdoc
@@ -363,10 +351,8 @@ DEPENDENCIES
   awesome_print
   bootsnap
   debug
-  dry-monads (~> 1.6.0)
-  dry-schema (~> 1.13.3)
-  dry-struct (~> 1.6.0)
-  dry-validation (~> 1.10.0)
+  dry-monads
+  dry-schema
   factory_bot_rails
   faker
   fakeredis
