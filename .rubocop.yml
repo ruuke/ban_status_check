@@ -1,0 +1,12 @@
+require:
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  Exclude:
+    - 'config/**/*'
+    - 'db/**/*'
+    - 'bin/**/*'
+    - 'config.ru'
