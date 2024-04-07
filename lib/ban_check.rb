@@ -37,7 +37,7 @@ class BanCheck
   end
 
   def check_cf_ipcountry(cf_ipcountry, user)
-    is_whitelisted = $redis.sismember('whitelisted_countries', cf_ipcountry)
+    is_whitelisted = RedisClient.client.sismember('whitelisted_countries', cf_ipcountry)
     user.ban_status = 'banned' unless is_whitelisted
 
     user

@@ -8,7 +8,7 @@ RSpec.describe 'V1::Users', type: :request do
     let(:user_params) { { idfa: 'some_idfa', rooted_device: false }.to_json }
 
     before do
-      $redis.sadd('whitelisted_countries', %w[US CA GB])
+      RedisClient.client.sadd('whitelisted_countries', %w[US CA GB])
     end
 
     context 'when the user is not banned' do

@@ -90,6 +90,7 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     diff-lcs (1.5.1)
+    dotenv (3.1.0)
     dry-configurable (1.1.0)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
@@ -351,6 +352,7 @@ DEPENDENCIES
   awesome_print
   bootsnap
   debug
+  dotenv
   dry-monads
   dry-schema
   factory_bot_rails

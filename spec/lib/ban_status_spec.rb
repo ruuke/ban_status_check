@@ -11,7 +11,7 @@ RSpec.describe BanCheck, type: :service do
   let(:params) { { idfa:, rooted_device:, cf_ipcountry: } }
 
   before do
-    $redis.sadd('whitelisted_countries', %w[US CA GB])
+    RedisClient.client.sadd('whitelisted_countries', %w[US CA GB])
   end
 
   describe 'validating parameters' do
