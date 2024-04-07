@@ -12,7 +12,7 @@ RSpec.describe 'V1::Users', type: :request do
       RedisClient.client.sadd('whitelisted_countries', %w[US CA GB])
       allow(VpnCheck).to receive(:new).and_return(vpn_check_instance)
       allow(vpn_check_instance).to receive(:call).with(ip: anything)
-                                                 .and_return(Dry::Monads::Result::Success.new(false))
+                                                 .and_return(Dry::Monads::Result::Success.new({ is_vpn_or_tor: false }))
     end
 
     context 'when the user is not banned' do

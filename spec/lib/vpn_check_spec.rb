@@ -41,7 +41,8 @@ RSpec.describe VpnCheck, type: :service do
       end
 
       it 'returns Success with false' do
-        expect(subject.call(ip:)).to be_success.and have_attributes(value!: false)
+        expect(subject.call(ip:)).to be_success.and have_attributes(value!: { is_vpn_or_tor: false, proxy: false,
+                                                                              vpn: false })
       end
     end
 
@@ -51,7 +52,7 @@ RSpec.describe VpnCheck, type: :service do
       end
 
       it 'returns Success with false due to error handling' do
-        expect(subject.call(ip:)).to be_success.and have_attributes(value!: false)
+        expect(subject.call(ip:)).to be_success.and have_attributes(value!: { is_vpn_or_tor: false })
       end
     end
   end
