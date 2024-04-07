@@ -9,9 +9,13 @@ RSpec.describe BanCheck, type: :service do
   let(:rooted_device) { false }
   let(:cf_ipcountry) { 'US' }
   let(:params) { { idfa:, rooted_device:, cf_ipcountry: } }
+  let(:vpn_check_instance) { instance_double(VpnCheck) }
 
   before do
     RedisClient.client.sadd('whitelisted_countries', %w[US CA GB])
+    allow(VpnCheck).to receive(:new).and_return(vpn_check_instance)
+    allow(vpn_check_instance).to receive(:call).with(ip: anything)
+                                               .and_return(Dry::Monads::Result::Success.new(false))
   end
 
   describe 'validating parameters' do
@@ -85,6 +89,31 @@ RSpec.describe BanCheck, type: :service do
       it 'bans the user based on country' do
         expect(service_call).to be_success
         expect(service_call.value!).to eq('banned')
+      end
+    end
+  end
+
+  describe 'IP Check for VPN/Tor' do
+    context 'when the IP is associated with VPN or Tor' do
+      before do
+        allow(vpn_check_instance).to receive(:call).with(ip: anything)
+                                                   .and_return(Dry::Monads::Result::Success.new(true))
+      end
+
+      let(:params) { { idfa:, rooted_device: false, cf_ipcountry: 'US', ip: '8.8.8.8' } }
+
+      it 'bans the user based on IP check' do
+        expect(service_call).to be_a(Dry::Monads::Result::Success)
+        expect(service_call.value!).to eq('banned')
+      end
+    end
+
+    context 'when the IP is not associated with VPN or Tor' do
+      let(:params) { { idfa:, rooted_device: false, cf_ipcountry: 'US', ip: '8.8.4.4' } }
+
+      it 'does not ban the user based on IP check' do
+        expect(service_call).to be_a(Dry::Monads::Result::Success)
+        expect(service_call.value!).to eq('not_banned')
       end
     end
   end

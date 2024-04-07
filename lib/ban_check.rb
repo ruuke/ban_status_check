@@ -16,6 +16,8 @@ class BanCheck
     valid_params = yield validate_params(params)
     user = find_or_create_user(valid_params)
     check_cf_ipcountry(valid_params[:cf_ipcountry], user) if user.not_banned?
+    vpn_check_result = ::VpnCheck.new.call(ip: params[:ip])
+    user.ban_status = 'banned' if vpn_check_result.value!
 
     if user.save
       Success(user.ban_status)

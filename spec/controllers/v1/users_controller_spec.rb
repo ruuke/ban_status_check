@@ -6,9 +6,13 @@ RSpec.describe 'V1::Users', type: :request do
   describe 'POST /v1/user/check_status' do
     let(:headers) { { 'CONTENT_TYPE' => 'application/json', 'CF-IPCountry' => 'US' } }
     let(:user_params) { { idfa: 'some_idfa', rooted_device: false }.to_json }
+    let(:vpn_check_instance) { instance_double(VpnCheck) }
 
     before do
       RedisClient.client.sadd('whitelisted_countries', %w[US CA GB])
+      allow(VpnCheck).to receive(:new).and_return(vpn_check_instance)
+      allow(vpn_check_instance).to receive(:call).with(ip: anything)
+                                                 .and_return(Dry::Monads::Result::Success.new(false))
     end
 
     context 'when the user is not banned' do
