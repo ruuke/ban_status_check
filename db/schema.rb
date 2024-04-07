@@ -24,6 +24,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_06_184245) do
     t.enum "ban_status", default: "not_banned", null: false, enum_type: "ban_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["idfa"], name: "index_users_on_idfa", unique: true
   end
-
 end
