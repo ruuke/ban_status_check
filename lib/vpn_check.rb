@@ -10,7 +10,13 @@ class VpnCheck
     response = cached_response ? JSON.parse(cached_response) : query_and_cache_vpnapi(ip)
 
     is_vpn_or_tor = check_vpn_or_tor_status(response)
-    Success(is_vpn_or_tor:, vpn: response.dig('security', 'vpn'), proxy: response.dig('security', 'proxy'))
+
+    Success(
+      is_vpn_or_tor:,
+      vpn: response.dig('security', 'vpn') || false,
+      proxy: response.dig('security', 'proxy') || false
+    )
+
   rescue StandardError => e
     Rails.logger.error("VPNAPI check failed: #{e.message}")
     Success(is_vpn_or_tor: false)

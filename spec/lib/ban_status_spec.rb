@@ -45,9 +45,18 @@ RSpec.describe BanCheck, type: :service do
     describe 'creating a new user' do
       context 'when IDFA does not exist' do
         it 'creates a new user' do
-          expect { service_call }.to change(User, :count).by(1)
-          expect(service_call).to be_a(Dry::Monads::Result::Success)
-          expect(service_call.value!).to eq('not_banned')
+          user_count_before = User.count
+          integrity_log_count_before = IntegrityLog.count
+
+          result = service_call
+
+          user_count_change = User.count - user_count_before
+          integrity_log_count_change = IntegrityLog.count - integrity_log_count_before
+
+          expect(user_count_change).to eq(1)
+          expect(integrity_log_count_change).to eq(1)
+          expect(result).to be_a(Dry::Monads::Result::Success)
+          expect(result.value!).to eq('not_banned')
         end
       end
     end
@@ -68,9 +77,13 @@ RSpec.describe BanCheck, type: :service do
 
       context 'when the user is already banned' do
         it 'returns banned status without updating' do
-          expect { service_call }.not_to(change { banned_user.reload.attributes })
-          expect(service_call).to be_a(Dry::Monads::Result::Success)
-          expect(service_call.value!).to eq('banned')
+          banned_user_attributes_before = banned_user.reload.attributes
+
+          result = service_call
+          expect(result).to be_a(Dry::Monads::Result::Success)
+          expect(result.value!).to eq('banned')
+          expect(banned_user.reload.attributes).to eq(banned_user_attributes_before)
+          expect { result }.not_to change(IntegrityLog, :count)
         end
       end
     end

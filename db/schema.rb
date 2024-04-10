@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_06_184245) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_10_172728) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_06_184245) do
     "banned",
   ], force: :cascade
 
+  create_table "integrity_logs", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "idfa"
+    t.string "ban_status"
+    t.string "ip"
+    t.boolean "rooted_device"
+    t.string "country"
+    t.boolean "proxy"
+    t.boolean "vpn"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_integrity_logs_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "idfa", null: false
     t.enum "ban_status", default: "not_banned", null: false, enum_type: "ban_status"
@@ -26,4 +40,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_06_184245) do
     t.datetime "updated_at", null: false
     t.index ["idfa"], name: "index_users_on_idfa", unique: true
   end
+
 end

@@ -16,8 +16,8 @@ class BanCheck
   def call(params)
     valid_params = yield validate_params(params)
     user = find_or_create_user(valid_params)
-    check_cf_ipcountry(valid_params[:cf_ipcountry], user) if user.not_banned?
-    vpn_check_result = vpn_check(valid_params[:ip]) if user.not_banned?
+    check_cf_ipcountry(valid_params[:cf_ipcountry], user)
+    vpn_check_result = vpn_check(valid_params[:ip])
     save_and_log(user, valid_params, vpn_check_result)
   end
 
@@ -59,7 +59,8 @@ class BanCheck
   end
 
   def log_integrity_data(user, params, vpn_check_result)
-    IntegrityLog.new(
+    IntegrityLoggerService.new.log(
+      user:,
       idfa: user.idfa,
       ban_status: user.ban_status,
       ip: params[:ip],
